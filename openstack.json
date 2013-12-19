@@ -1,0 +1,94 @@
+{
+  "name": "havana",
+  "description": "Chef-server example environment",
+  "cookbook_versions": {
+  },
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+  },
+  "override_attributes": {
+    "developer_mode": false,
+    "monitoring" : {
+      "metric_provider" : "collectd",
+      "procmon_provider" : "monit"
+    },
+    "glance": {
+      "image_upload": true,
+      "images": ["cirros", "precise"]
+    },    
+    "ceilometer": {
+      "services": {
+        "api": {
+          "scheme": "https"
+        }
+      }
+    },
+    "nova": {
+      "services" : {
+         "api": {
+          "scheme": "https"
+        },
+         "internal-api": {
+          "scheme": "https"
+        },
+         "admin-api": {
+          "scheme": "https"
+        }, 
+         "ec2-admin": {
+          "scheme": "https"
+        },
+         "ec2-public": {
+          "scheme": "https"
+        },
+         "xvpvnc-proxy": {
+          "scheme": "https"
+        },
+         "novnc-proxu": {
+          "scheme": "https"
+        },
+         "novnc-server": {
+          "scheme": "https"
+        },
+         "volume": {
+          "scheme": "https"
+        }
+      },
+      "ratelimit" : {
+        "api" : { 
+          "enabled" : true
+        },
+        "volume" : { "enabled" : true }
+      },
+      "libvirt": { "virt_type": "qemu" },
+      "networks": {
+        "public": {
+            "label": "public",
+            "ipv4_cidr": "10.10.100.0/24",
+            "bridge": "br100",
+            "bridge_dev": "eth0.100",
+            "dns1": "8.8.8.8",
+            "dns2": "8.8.4.4"
+        },
+        "private": {
+            "label": "private",
+            "ipv4_cidr": "172.16.101.0/24",
+            "bridge": "br101",
+            "bridge_dev": "eth0.101",
+            "dns1": "8.8.8.8",
+            "dns2": "8.8.4.4"
+        }
+      }
+    },
+    "mysql": {
+      "allow_remote_root": true,
+      "root_network_acl": "%"
+    },
+    "osops_networks": {
+      "nova": "172.16.80.0/24",
+      "public": "192.168.211.0/24",
+      "management": "172.16.80.0/24"
+    },
+    "package_component": "havana"
+  }
+}
