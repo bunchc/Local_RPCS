@@ -11,11 +11,9 @@ Vagrant.configure("2") do |config|
 
     config.vm.box = "precise64"
     config.vm.box_url = "http://files.vagrantup.com/precise64.box"
-    config.vm.synced_folder ".", "/vagrant", nfs: true
     config.vm.provider "vmware_fusion" do |v, override|
         override.vm.box = "precise64"
         override.vm.box_url = "http://grahamc.com/vagrant/ubuntu-12.04.2-server-amd64-vmware-fusion.box"
-#	override.vm.synced_folder ".", "/vagrant", nfs: true
     end
  
     nodes.each do |prefix, (count, ip_start)|
@@ -73,19 +71,14 @@ Vagrant.configure("2") do |config|
                 elsif prefix == "rpcs-controller"
                     box.vm.provision :shell, :inline => "sudo echo '10.10.80.100    chef.cook.book' >> /etc/hosts"
                     box.vm.provision :shell, :inline => "sudo echo 10.10.80.#{ip_start+i}    #{hostname}.cook.book"
-                    box.vm.provision :shell, :path => "proxy.sh"
                     box.vm.provision :shell, :inline => "curl -L https://www.opscode.com/chef/install.sh | sudo bash"
                     box.vm.provision :chef_client do |chef|
                         chef.chef_server_url = "https://chef.cook.book/"
                         chef.validation_key_path = "validation.pem"
                         chef.environment = "havana"
                         chef.add_role "allinone"
+                        chef.add_recipe "tempest"
                     end
-                
-                # Everyone else, gets some generic things.
-                else
-                    box.vm.provision :shell, :path => "proxy.sh"
-                    box.vm.provision :shell, :path => "#{prefix}.sh"
                 end
             end
         end

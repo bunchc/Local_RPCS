@@ -13,6 +13,19 @@
       "metric_provider" : "collectd",
       "procmon_provider" : "monit"
     },
+    "cinder": {
+      "services": {
+        "api": {
+          "scheme": "https"
+        },
+        "admin-api": {
+          "scheme": "https"
+        },
+        "internal-api": {
+          "scheme": "https"
+        }
+      }
+    },
     "glance": {
       "image_upload": true,
       "images": ["cirros", "precise"]
@@ -86,7 +99,7 @@
     },
     "osops_networks": {
       "nova": "172.16.80.0/24",
-      "public": "192.168.211.0/24",
+      "public": "10.10.80.0/24",
       "management": "172.16.80.0/24"
     },
     "package_component": "havana"
